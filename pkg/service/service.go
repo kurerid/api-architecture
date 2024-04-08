@@ -3,6 +3,8 @@ package service
 import (
 	"api-architecture/models"
 	"api-architecture/pkg/repository"
+	"api-architecture/pkg/transactor"
+	"context"
 )
 
 type (
@@ -13,13 +15,19 @@ type (
 		Delete(id int) error
 	}
 
+	Transactor interface {
+		WithinTransaction(ctx context.Context, tFunc transactor.Func) (interface{}, error)
+	}
+
 	Service struct {
 		Todo
+		Transactor
 	}
 )
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
-		Todo: NewTodoService(repo.Todo),
+		Todo:       NewTodoService(repo.Todo),
+		Transactor: NewTransactorService(repo.Transactor),
 	}
 }

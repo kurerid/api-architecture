@@ -5,6 +5,7 @@ import (
 	"api-architecture/pkg/handler"
 	"api-architecture/pkg/repository"
 	"api-architecture/pkg/service"
+	"api-architecture/pkg/usecase"
 	"api-architecture/server"
 	"context"
 	"github.com/execaus/exloggo"
@@ -28,7 +29,8 @@ func main() {
 
 	repos := repository.NewRepository(database)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
+	usecases := usecase.NewUsecase(services)
+	handlers := handler.NewHandler(usecases)
 
 	ginEngine := handlers.InitRoutes()
 	runServer(&serverInstance, ginEngine, "8080")

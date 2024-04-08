@@ -2,6 +2,8 @@ package repository
 
 import (
 	"api-architecture/models"
+	"api-architecture/pkg/transactor"
+	"context"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -13,13 +15,19 @@ type (
 		Delete(id int) error
 	}
 
+	Transactor interface {
+		WithinTransaction(ctx context.Context, tFunc transactor.Func) (interface{}, error)
+	}
+
 	Repository struct {
 		Todo
+		Transactor
 	}
 )
 
 func NewRepository(connection *sqlx.DB) *Repository {
 	return &Repository{
-		Todo: NewTodoPostgres(connection),
+		Todo:       NewTodoPostgres(connection),
+		Transactor: NewTransactorPostgres(connection),
 	}
 }

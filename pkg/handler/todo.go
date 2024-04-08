@@ -14,7 +14,7 @@ func (h *Handler) createTodo(c *gin.Context) {
 		return
 	}
 
-	if err := h.services.Todo.Create(input.Note); err != nil {
+	if err := h.usecases.CreateTodo(input); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
@@ -29,7 +29,7 @@ func (h *Handler) readTodo(c *gin.Context) {
 		return
 	}
 
-	output, err := h.services.Todo.Read(todoID)
+	output, err := h.usecases.ReadTodo(todoID)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -45,7 +45,7 @@ func (h *Handler) updateTodo(c *gin.Context) {
 		return
 	}
 
-	if err := h.services.Todo.Update(input.Id, input.Note); err != nil {
+	if err := h.usecases.UpdateTodo(input); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
@@ -60,7 +60,7 @@ func (h *Handler) deleteTodo(c *gin.Context) {
 		return
 	}
 
-	if err = h.services.Todo.Delete(todoID); err != nil {
+	if err = h.usecases.DeleteTodo(todoID); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
